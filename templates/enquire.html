@@ -68,19 +68,6 @@
       <p>Fill in the details below and Mrs Aw will get back to you about suitability and available slots.</p>
     </div>
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% for category, name in messages if category == 'success' %}
-        <div class="alert success">
-          <i data-lucide="circle-check"></i>
-          <div>
-            <strong>Thank you, {{ name }}! Your enquiry has been received.</strong>
-            <p>Mrs Aw will be in touch soon. For a faster reply, you can also send these details on WhatsApp.</p>
-            {% if wa_text %}<a class="btn btn-whatsapp" target="_blank" rel="noopener" href="{{ biz.whatsapp_link }}?text={{ wa_text }}"><i data-lucide="phone"></i> Send on WhatsApp</a>{% endif %}
-          </div>
-        </div>
-      {% endfor %}
-    {% endwith %}
-
     {% if errors %}<div class="alert error"><i data-lucide="circle-alert"></i> Please check the highlighted fields.</div>{% endif %}
 
     <form class="card contact-form" method="post" action="{{ url_for('enquire') }}#contact-form" novalidate>

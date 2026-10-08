@@ -11,7 +11,7 @@ from datetime import datetime
 from pathlib import Path
 from urllib.parse import quote
 
-from flask import Flask, flash, redirect, render_template, request, url_for
+from flask import Flask, redirect, render_template, request, url_for
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "dev-only-change-me")
@@ -247,10 +247,9 @@ def enquire():
                     writer.writerow({"submitted_at": datetime.now().isoformat(timespec="seconds"), **data})
             except OSError:  # read-only hosts like Vercel: skip saving, the WhatsApp hand-off still works
                 app.logger.warning("Could not save enquiry to %s", ENQUIRIES_FILE)
-            flash(data["parent_name"], "success")
-            return redirect(url_for("enquire", wa=_whatsapp_text(data)) + "#contact-form")
+            return redirect(f"{BUSINESS['whatsapp_link']}?text={_whatsapp_text(data)}")
     return render_template("enquire.html", page="enquire", reviews=REVIEWS, levels=LEVEL_OPTIONS,
-                           form=data, errors=errors, wa_text=request.args.get("wa"))
+                           form=data, errors=errors)
 
 
 if __name__ == "__main__":
