@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Class Policies · {{ biz.brand }}{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <h1>Class Policies &amp; Who This Is For</h1>
+    <p>Here’s how our lessons work, and the students who benefit most.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container policies-grid">
+    <div>
+      <h2 class="pill-heading"><i data-lucide="calendar-days"></i> Attendance &amp; Absence</h2>
+      <div class="policy-list">
+        {% for title, icon, text in attendance %}
+          <article class="card policy">
+            <span class="stage-num">{{ loop.index }}</span>
+            <div class="stage-icon"><i data-lucide="{{ icon }}"></i></div>
+            <div><h3>{{ title }}</h3><p>{{ text }}</p></div>
+          </article>
+        {% endfor %}
+      </div>
+      <article class="card policy withdrawal">
+        <div class="stage-icon"><i data-lucide="log-out"></i></div>
+        <div><h3>Withdrawal</h3>
+          <p>Please inform Mrs Aw before the next month’s fees are collected if you wish to withdraw.
+            Once the month has begun, fees paid are not refundable.</p></div>
+      </article>
+    </div>
+
+    <div>
+      <h2 class="pill-heading"><i data-lucide="users"></i> This class is suitable for students who need help with:</h2>
+      <ul class="suitable-list card">
+        {% for title, icon, text in suitable %}
+          <li>
+            <span class="round-icon light"><i data-lucide="{{ icon }}"></i></span>
+            <div><h3>{{ title }}</h3><p>{{ text }}</p></div>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container">
+    <div class="banner light">
+      <i data-lucide="book-open-text"></i>
+      <p><strong>Clear teaching. Guided practice. Confident learners.</strong><br>
+        Structured lessons, practical frameworks and consistent feedback help every student take one clearer step forward.</p>
+    </div>
+  </div>
+</section>
+{% endblock %}

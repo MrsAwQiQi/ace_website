@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% block title %}How to Enquire · {{ biz.brand }}{% endblock %}
+{% macro field_error(name) %}{% if errors[name] %}<span class="field-error">{{ errors[name] }}</span>{% endif %}{% endmacro %}
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <h1>How to Enquire</h1>
+    <p>To check class availability, please WhatsApp Mrs Aw at <strong>{{ biz.whatsapp }}</strong> or fill in the form below.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container enquire-grid">
+    <article class="card info-card">
+      <h3><i data-lucide="message-circle-more"></i> Please include</h3>
+      <ul class="checks">
+        <li>Your child’s level in 2026</li>
+        <li>Your child’s current English concern</li>
+        <li>Preferred class timing, if any</li>
+        <li>Whether your child is looking for regular weekly lessons or holiday workshops</li>
+      </ul>
+      <hr>
+      <p>✦ I will advise on class suitability and available slots.</p>
+      <p>✦ As classes are kept small, some levels may be full. Parents may join the waitlist if a suitable
+        slot is not currently available.</p>
+      <a class="btn btn-whatsapp" href="{{ biz.whatsapp_link }}" target="_blank" rel="noopener"><i data-lucide="phone"></i> WhatsApp {{ biz.whatsapp }}</a>
+    </article>
+
+    <article class="card info-card contact-card">
+      <h3>Contact</h3>
+      <dl>
+        <dt><i data-lucide="instagram"></i> Instagram</dt>
+        <dd><a href="https://instagram.com/{{ biz.instagram }}" target="_blank" rel="noopener">@{{ biz.instagram }}</a></dd>
+        <dt><i data-lucide="phone"></i> WhatsApp</dt>
+        <dd><a href="{{ biz.whatsapp_link }}" target="_blank" rel="noopener">{{ biz.whatsapp }}</a></dd>
+        <dt><i data-lucide="file-text"></i> Business Registration Name</dt>
+        <dd>{{ biz.registered_name }}</dd>
+        <dt><i data-lucide="shield-check"></i> UEN</dt>
+        <dd>{{ biz.uen }}</dd>
+      </dl>
+    </article>
+  </div>
+</section>
+
+<section class="section section-alt" id="reviews">
+  <div class="container">
+    <div class="section-head">
+      <h2>Parent Reviews</h2>
+      <p>To read more reviews, search Google for <a class="text-link" target="_blank" rel="noopener"
+        href="https://www.google.com/search?q={{ 'Mrs Aw Achieving Excellence in English'|urlencode }}">“Mrs Aw Achieving Excellence in English”</a>.</p>
+    </div>
+    <div class="review-grid">
+      {% for name, initial, text in reviews %}
+        <blockquote class="card review">
+          <header><span class="avatar a{{ loop.index }}">{{ initial }}</span><strong>{{ name }}</strong>
+            <span class="stars" aria-label="5 out of 5 stars">★★★★★</span></header>
+          <p>{{ text }}</p>
+        </blockquote>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section" id="contact-form">
+  <div class="container narrow">
+    <div class="section-head">
+      <h2>Send an enquiry</h2>
+      <p>Fill in the details below and Mrs Aw will get back to you about suitability and available slots.</p>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, name in messages if category == 'success' %}
+        <div class="alert success">
+          <i data-lucide="circle-check"></i>
+          <div>
+            <strong>Thank you, {{ name }}! Your enquiry has been received.</strong>
+            <p>Mrs Aw will be in touch soon. For a faster reply, you can also send these details on WhatsApp.</p>
+            {% if wa_text %}<a class="btn btn-whatsapp" target="_blank" rel="noopener" href="{{ biz.whatsapp_link }}?text={{ wa_text }}"><i data-lucide="phone"></i> Send on WhatsApp</a>{% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    {% endwith %}
+
+    {% if errors %}<div class="alert error"><i data-lucide="circle-alert"></i> Please check the highlighted fields.</div>{% endif %}
+
+    <form class="card contact-form" method="post" action="{{ url_for('enquire') }}#contact-form" novalidate>
+      <div class="form-grid">
+        <label class="{{ 'invalid' if errors.parent_name }}">Parent’s name *
+          <input name="parent_name" value="{{ form.parent_name }}" required autocomplete="name">
+          {{ field_error('parent_name') }}
+        </label>
+        <label class="{{ 'invalid' if errors.phone }}">Phone / WhatsApp *
+          <input name="phone" type="tel" value="{{ form.phone }}" required autocomplete="tel" placeholder="e.g. 9123 4567">
+          {{ field_error('phone') }}
+        </label>
+        <label class="{{ 'invalid' if errors.email }}">Email (optional)
+          <input name="email" type="email" value="{{ form.email }}" autocomplete="email">
+          {{ field_error('email') }}
+        </label>
+        <label class="{{ 'invalid' if errors.child_level }}">Child’s level in 2026 *
+          <select name="child_level" required>
+            <option value="">Select a level</option>
+            {% for lvl in levels %}<option {{ 'selected' if form.child_level == lvl }}>{{ lvl }}</option>{% endfor %}
+          </select>
+          {{ field_error('child_level') }}
+        </label>
+        <label class="full {{ 'invalid' if errors.concern }}">Child’s current English concern *
+          <textarea name="concern" rows="3" required placeholder="e.g. Struggles to organise ideas in compositions">{{ form.concern }}</textarea>
+          {{ field_error('concern') }}
+        </label>
+        <label>Preferred class timing (optional)
+          <input name="preferred_timing" value="{{ form.preferred_timing }}" placeholder="e.g. Saturday morning">
+        </label>
+        <label>Looking for
+          <select name="lesson_type">
+            {% for opt in ['Regular weekly lessons', 'Holiday workshops', 'Both'] %}
+              <option {{ 'selected' if form.lesson_type == opt }}>{{ opt }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <fieldset class="full">
+          <legend>Preferred mode</legend>
+          {% for opt in ['In-person', 'Zoom', 'Either'] %}
+            <label class="radio"><input type="radio" name="mode" value="{{ opt }}"
+              {{ 'checked' if form.mode == opt or (not form.mode and opt == 'Either') }}> {{ opt }}</label>
+          {% endfor %}
+        </fieldset>
+        <label class="full">Anything else? (optional)
+          <textarea name="message" rows="3">{{ form.message }}</textarea>
+        </label>
+        <label class="hp" aria-hidden="true">Website <input name="website" tabindex="-1" autocomplete="off"></label>
+      </div>
+      <button class="btn btn-primary" type="submit"><i data-lucide="send"></i> Send enquiry</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

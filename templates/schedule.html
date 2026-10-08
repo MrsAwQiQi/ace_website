@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}2026 Class Schedule · {{ biz.brand }}{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <h1>2026 Class Schedule</h1>
+    <p>Small-group English lessons for Primary and Secondary students.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <figure class="photo-frame wide">
+      <img src="{{ url_for('static', filename='img/class-group.jpg') }}" alt="Students working together at a table during class">
+    </figure>
+
+    <div class="schedule">
+      {% for level, icon, note, slots in schedule %}
+        <div class="schedule-row">
+          <div class="schedule-level">
+            <span class="round-icon"><i data-lucide="{{ icon }}"></i></span>
+            <strong>{{ level }}</strong>
+            {% if note %}<em class="accent">{{ note }}</em>{% endif %}
+          </div>
+          <div class="schedule-slots">
+            {% for day, time in slots %}
+              <div class="slot"><i data-lucide="calendar"></i><span>{{ day }}</span><time>{{ time }}</time></div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="two-col">
+      <article class="card info-card">
+        <h3><i data-lucide="monitor-smartphone"></i> Hybrid Lessons</h3>
+        <p>Lessons are conducted online via Zoom or in-person. Choose the option that works best for you!</p>
+      </article>
+      <article class="card info-card">
+        <h3><i data-lucide="users"></i> Small Class Size</h3>
+        <p>Each class is capped at 10 students for personalised attention and meaningful learning.</p>
+      </article>
+    </div>
+    <p class="center"><a class="btn btn-primary" href="{{ url_for('enquire') }}#contact-form">Check slot availability</a></p>
+  </div>
+</section>
+{% endblock %}

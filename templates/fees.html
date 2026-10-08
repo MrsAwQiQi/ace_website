@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}2026 Fees · {{ biz.brand }}{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <h1>2026 Class Fees</h1>
+    <p>Small-group English lessons for Primary and Secondary students.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="notice"><i data-lucide="video"></i><span>Zoom classes are <strong>$10 cheaper</strong>.</span></div>
+    <div class="fee-list">
+      {% for name, sub, icon, duration, fee in fees %}
+        <article class="card fee-row">
+          <span class="stage-num">{{ loop.index }}</span>
+          <div class="stage-icon"><i data-lucide="{{ icon }}"></i></div>
+          <div class="stage-title"><h2>{{ name }}</h2><p class="accent">{{ sub }}</p></div>
+          <div class="fee-duration"><i data-lucide="clock"></i> {{ duration }} <small>/ lesson</small></div>
+          <div class="fee-price">${{ fee }}<small>per lesson</small></div>
+        </article>
+      {% endfor %}
+    </div>
+
+    <div class="two-col">
+      <article class="card info-card">
+        <h3><i data-lucide="wallet"></i> Payment</h3>
+        <ul class="dots">
+          <li>Fees are collected monthly in advance, before the first lesson of the month.</li>
+          <li>Monthly fees are based on 4 scheduled lessons.</li>
+          <li>If there is a fifth week in the month, no regular lesson is scheduled unless otherwise stated.</li>
+        </ul>
+      </article>
+      <article class="card info-card">
+        <h3><i data-lucide="calendar-days"></i> School Holidays</h3>
+        <ul class="dots">
+          <li>Regular weekly lessons pause during the March, June, September and December school holidays.</li>
+          <li>Term-time lessons run until the end of November; there are no regular classes in December.</li>
+          <li>Holiday workshops or special programmes may be offered separately, at an additional charge.</li>
+        </ul>
+      </article>
+    </div>
+    <p class="center"><a class="btn btn-primary" href="{{ url_for('schedule') }}">See class timings</a></p>
+  </div>
+</section>
+{% endblock %}

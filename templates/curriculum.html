@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}What Students Learn · {{ biz.brand }}{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <h1>What Students Learn in Class</h1>
+    <p>English becomes less overwhelming when students are taught the right skills at the right stage.
+      Each level builds on the previous one, so students grow in confidence, accuracy and independence.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container stage-list">
+    {% for lvl in levels %}
+      <article class="card stage">
+        <span class="stage-num">{{ loop.index }}</span>
+        <div class="stage-icon"><i data-lucide="{{ lvl.icon }}"></i></div>
+        <div class="stage-title">
+          <h2>{{ lvl.name }}</h2>
+          <p class="accent">{{ lvl.subtitle }}</p>
+        </div>
+        <ul class="ticks">
+          {% for t in lvl.topics %}<li>{{ t }}</li>{% endfor %}
+        </ul>
+      </article>
+    {% endfor %}
+  </div>
+  <p class="center tagline-inline">Clear frameworks • Guided practice • Confidence that grows</p>
+</section>
+{% endblock %}

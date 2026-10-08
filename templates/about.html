@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}About Mrs Aw · {{ biz.brand }}{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <h1>About Mrs Aw</h1>
+    <p>Hi, I’m Qi Qi, but most of my students call me Mrs Aw.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container about-grid">
+    <div class="prose">
+      <p>I started tutoring at 17, and over the years I have taught at a private international college,
+        written curriculum and trained teachers at an enrichment centre, and worked with students across
+        Primary and Secondary levels.</p>
+      <p class="pull">My classes are built on one simple belief: students do better when they know exactly what to do.</p>
+      <p>That is why, over the years, I have found myself constantly creating frameworks for the parts of
+        English that students struggle to ‘see’ clearly, from oral responses and situational writing to
+        comprehension, composition and essay writing.</p>
+      <p>These frameworks are not shortcuts. They are tools that help students think clearly, write
+        purposefully, and respond with confidence under exam conditions.</p>
+    </div>
+    <figure class="photo-frame portrait">
+      <img src="{{ url_for('static', filename='img/mrs-aw.jpg') }}" alt="Mrs Aw smiling with a student">
+    </figure>
+  </div>
+</section>
+
+<section class="section section-alt" id="heart">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">What a lesson with Mrs Aw looks like</p>
+      <h2>The HEART Method</h2>
+      <p>At the heart of my teaching is what I call HEART Education.</p>
+    </div>
+    <div class="heart-grid">
+      {% for letter, word, sub, icon, text in heart %}
+        <article class="card heart-card">
+          <span class="letter">{{ letter }}</span>
+          <h3>{{ word }}</h3>
+          <small>{{ sub }}</small>
+          <i data-lucide="{{ icon }}"></i>
+          <p>{{ text }}</p>
+        </article>
+      {% endfor %}
+    </div>
+    <div class="banner">
+      <i data-lucide="heart"></i>
+      <p><strong>HEART</strong> is how we build confident learners with strong skills and kind hearts.</p>
+    </div>
+    <div class="closing">
+      <p>Every class follows a clear rhythm, because structure helps students feel safe enough to learn, try, and improve.</p>
+      <p class="closing-strong">By the end of a lesson, a child has taken one clearer step towards owning the skill.</p>
+    </div>
+  </div>
+</section>
+{% endblock %}
