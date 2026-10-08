@@ -1,0 +1,3 @@
+cd ~/Desktop/qiqi_website/ace_website
+source .venv/bin/activate
+python app.py
