@@ -151,7 +151,8 @@ p { margin: 0 0 1em; }
 .ticks li::before { content: ""; position: absolute; left: 0; top: .65em; width: 7px; height: 7px; border-radius: 50%; background: var(--gold); }
 .tagline-inline { font-family: var(--serif); color: var(--navy); font-size: 1.3rem; margin-top: 32px; }
 
-.notice { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 14px; margin-bottom: 24px; border: 1.5px solid var(--gold); border-radius: var(--radius); background: var(--paper); font-family: var(--serif); font-size: 1.4rem; color: var(--navy); }
+.notice { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 6px 12px; margin-top: 14px; font-size: .9rem; color: var(--muted); }
+.notice [data-lucide], .notice svg { color: var(--gold); }
 .fee-row { display: grid; grid-template-columns: auto auto 1fr auto auto; gap: 22px; align-items: center; padding: 20px 26px; }
 .fee-duration { color: var(--muted); padding: 0 22px; border-inline: 1px solid var(--line); white-space: nowrap; }
 .fee-duration [data-lucide], .fee-duration svg { color: var(--gold); }
