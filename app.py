@@ -237,13 +237,16 @@ def enquire():
             return redirect(url_for("enquire"))
         data, errors = _validate(request.form)
         if not errors:
-            ENQUIRIES_FILE.parent.mkdir(exist_ok=True)
-            is_new = not ENQUIRIES_FILE.exists()
-            with ENQUIRIES_FILE.open("a", newline="", encoding="utf-8") as f:
-                writer = csv.DictWriter(f, fieldnames=ENQUIRY_FIELDS)
-                if is_new:
-                    writer.writeheader()
-                writer.writerow({"submitted_at": datetime.now().isoformat(timespec="seconds"), **data})
+            try:
+                ENQUIRIES_FILE.parent.mkdir(exist_ok=True)
+                is_new = not ENQUIRIES_FILE.exists()
+                with ENQUIRIES_FILE.open("a", newline="", encoding="utf-8") as f:
+                    writer = csv.DictWriter(f, fieldnames=ENQUIRY_FIELDS)
+                    if is_new:
+                        writer.writeheader()
+                    writer.writerow({"submitted_at": datetime.now().isoformat(timespec="seconds"), **data})
+            except OSError:  # read-only hosts like Vercel: skip saving, the WhatsApp hand-off still works
+                app.logger.warning("Could not save enquiry to %s", ENQUIRIES_FILE)
             flash(data["parent_name"], "success")
             return redirect(url_for("enquire", wa=_whatsapp_text(data)) + "#contact-form")
     return render_template("enquire.html", page="enquire", reviews=REVIEWS, levels=LEVEL_OPTIONS,
