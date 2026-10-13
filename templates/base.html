@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
     <div class="container header-inner">
       <a class="brand" href="{{ url_for('home') }}">
@@ -33,7 +34,7 @@
     </div>
   </header>
 
-  <main>
+  <main id="main" tabindex="-1">
     {% block content %}{% endblock %}
   </main>
 
@@ -65,6 +66,12 @@
     </div>
     <div class="container footer-bottom small">© {{ year }} {{ biz.registered_name }}. All rights reserved.</div>
   </footer>
+
+  {% if page != 'enquire' %}
+    <a class="wa-float" href="{{ biz.whatsapp_link }}" target="_blank" rel="noopener" aria-label="WhatsApp Mrs Aw at {{ biz.whatsapp }}">
+      <i data-lucide="message-circle"></i><span>WhatsApp</span>
+    </a>
+  {% endif %}
 
   <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
   <script src="{{ url_for('static', filename='js/main.js') }}"></script>

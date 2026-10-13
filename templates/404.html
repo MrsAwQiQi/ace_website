@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Page not found · {{ biz.brand }}{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <h1>Page not found</h1>
+    <p>Sorry, this page doesn’t exist or has moved.</p>
+    <div class="btn-row btn-row-center">
+      <a class="btn btn-primary" href="{{ url_for('home') }}">Go to the home page</a>
+      <a class="btn btn-ghost" href="{{ url_for('schedule') }}">See class schedule</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

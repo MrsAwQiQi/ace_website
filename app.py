@@ -28,6 +28,9 @@ BUSINESS = {
     "instagram": "Mrsawqiqi",
     "whatsapp": "9222 1021",
     "whatsapp_link": "https://wa.me/6592221021",
+    # Opens the Google reviews panel for the business listing.
+    "reviews_link": "https://www.google.com/search?q=Achieving+Excellence+in+English+with+Mrs+Aw"
+                    "#lrd=0x31da3d6e0dd2a9e5:0xa906496bca5f04d7,1,,,,",
 }
 
 NAV = [
@@ -98,7 +101,28 @@ FEES = [
     ("Secondary 1–4", "Building Thinking, Writing and Oracy Skills", "lightbulb", "2 hr", 100),
 ]
 
-SCHEDULE = [
+SCHEDULE_2027 = [
+    ("Primary 1", "sprout", None, [("Friday", "3:00 – 4:30 pm")]),
+    ("Primary 2", "book-open", None, [("Thursday", "3:00 – 4:30 pm")]),
+    ("Primary 3", "pencil-ruler", None, [("Saturday", "1:00 – 3:00 pm")]),
+    ("Primary 4", "trophy", None, [("Monday", "3:00 – 5:00 pm"), ("Thursday", "5:00 – 7:00 pm")]),
+    ("Primary 5", "notebook-pen", None, [("Monday", "5:00 – 7:00 pm"), ("Tuesday", "7:00 – 9:00 pm")]),
+    ("Primary 6", "graduation-cap", None, [("Friday", "5:00 – 7:00 pm"), ("Saturday", "9:00 – 11:00 am")]),
+    ("P6 Revision Class", "file-check", "For students in regular classes · case by case",
+     [("Tuesday", "5:00 pm")]),
+    ("Secondary 1", "star", None, [("Thursday", "7:00 – 9:00 pm")]),
+    ("Secondary 2", "lightbulb", None, [("Saturday", "11:00 am – 1:00 pm")]),
+    ("Secondary 3", "award", None, [("Monday", "7:30 – 9:30 pm")]),
+]
+
+TERMS_2027 = [
+    ("Term 1", "4 January – 13 March", "25 November 2026"),
+    ("Term 2", "22 March – 29 May", "End February"),
+    ("Term 3", "28 June – 12 September", "End May"),
+    ("Term 4", "20 September – 30 November", "End August"),
+]
+
+SCHEDULE_2026 = [
     ("Primary 1", "sprout", "Starting 18 Sept", [("Friday", "3:00 – 4:30 pm")]),
     ("Primary 2", "book-open", None, [("Saturday", "1:00 – 2:30 pm")]),
     ("Primary 3", "pencil-ruler", None, [("Monday", "3:00 – 5:00 pm"), ("Thursday", "5:00 – 7:00 pm")]),
@@ -108,6 +132,17 @@ SCHEDULE = [
     ("Secondary 1", "star", None, [("Saturday", "11:00 am – 1:00 pm")]),
     ("Secondary 2", "lightbulb", None, [("Monday", "7:30 – 9:30 pm")]),
 ]
+
+# Year tabs on the schedule page, newest first (the first one opens by default).
+SCHEDULES = [
+    {"year": "2027", "badge": "New", "intro": "The new academic year starts this November.",
+     "rows": SCHEDULE_2027, "terms": TERMS_2027, "poster": "img/2027-class-schedule.jpeg"},
+    {"year": "2026", "badge": None, "intro": None,
+     "rows": SCHEDULE_2026, "terms": None, "poster": None},
+]
+
+# The year parents are enrolling for: the newest year on the schedule page.
+ENROL_YEAR = SCHEDULES[0]["year"]
 
 ATTENDANCE = [
     ("Reserved Slot", "calendar-check",
@@ -163,13 +198,12 @@ LEVEL_OPTIONS = ["Primary 1", "Primary 2", "Primary 3", "Primary 4", "Primary 5"
 
 @app.context_processor
 def inject_globals():
-    return {"biz": BUSINESS, "nav": NAV, "year": datetime.now().year}
+    return {"biz": BUSINESS, "nav": NAV, "year": datetime.now().year, "enrol_year": ENROL_YEAR}
 
 
 @app.route("/")
 def home():
-    return render_template("home.html", page="home", levels=LEVELS, heart=HEART,
-                           review=REVIEWS[0])
+    return render_template("home.html", page="home", heart=HEART, reviews=REVIEWS)
 
 
 @app.route("/about")
@@ -189,7 +223,7 @@ def fees():
 
 @app.route("/schedule")
 def schedule():
-    return render_template("schedule.html", page="schedule", schedule=SCHEDULE)
+    return render_template("schedule.html", page="schedule", schedules=SCHEDULES)
 
 
 @app.route("/policies")
@@ -208,7 +242,7 @@ def _validate(form):
     if data["email"] and not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", data["email"]):
         errors["email"] = "Please enter a valid email address."
     if data["child_level"] not in LEVEL_OPTIONS:
-        errors["child_level"] = "Please choose your child's level in 2026."
+        errors["child_level"] = f"Please choose your child's level in {ENROL_YEAR}."
     if not data["concern"]:
         errors["concern"] = "Please share your child's current English concern."
     return data, errors
@@ -216,7 +250,7 @@ def _validate(form):
 
 def _whatsapp_text(d):
     lines = [f"Hi Mrs Aw, I'm {d['parent_name']}. I'd like to enquire about English classes.",
-             f"Child's level in 2026: {d['child_level']}",
+             f"Child's level in {ENROL_YEAR}: {d['child_level']}",
              f"Current English concern: {d['concern']}"]
     if d["preferred_timing"]:
         lines.append(f"Preferred class timing: {d['preferred_timing']}")
@@ -248,8 +282,13 @@ def enquire():
             except OSError:  # read-only hosts like Vercel: skip saving, the WhatsApp hand-off still works
                 app.logger.warning("Could not save enquiry to %s", ENQUIRIES_FILE)
             return redirect(f"{BUSINESS['whatsapp_link']}?text={_whatsapp_text(data)}")
-    return render_template("enquire.html", page="enquire", reviews=REVIEWS, levels=LEVEL_OPTIONS,
+    return render_template("enquire.html", page="enquire", levels=LEVEL_OPTIONS,
                            form=data, errors=errors)
+
+
+@app.errorhandler(404)
+def not_found(e):
+    return render_template("404.html", page=None), 404
 
 
 if __name__ == "__main__":

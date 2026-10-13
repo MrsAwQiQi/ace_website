@@ -1,0 +1,16 @@
+Parent reviews Function 
+make the review dynamics if possible to link it to external page. 
+Questions : where is the reviews being linked to 
+https://www.google.com.sg/search?sca_esv=7cd595ac914176fe&cs=0&output=search&kgmid=/g/11yltxrzks&q=Achieving+Excellence+in+English+with+Mrs+Aw&shem=dlvs1,epsd1,ltae,rimspwouoe&shndl=30&source=sh/x/loc/uni/m1/1&kgs=04b304d7e4cb003e&utm_source=dlvs1,epsd1,ltae,rimspwouoe,sh/x/loc/uni/m1/1&sei=pjzOaomJFeaG4-EP-6Tj-AQ#lrd=0x31da3d6e0dd2a9e5:0xa906496bca5f04d7,1,,,,
+
+Speeling Practice tool integration Function 
+
+Calculate AL here integration 
+
+Class Fees
+Questions : does it reemains or its 2026 only for the title
+
+Rethink the webpage logic, i will perform ui ux test 
+
+optimisation 
+1. when press 2027 / 2026 in class schedule, the page should auto scroll up 

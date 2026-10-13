@@ -1,35 +1,80 @@
 {% extends "base.html" %}
-{% block title %}2026 Class Schedule · {{ biz.brand }}{% endblock %}
+{% block title %}Class Schedule · {{ biz.brand }}{% endblock %}
 {% block content %}
 <section class="page-hero">
   <div class="container">
-    <h1>2026 Class Schedule</h1>
+    <h1>Class Schedule</h1>
     <p>Small-group English lessons for Primary and Secondary students.</p>
   </div>
 </section>
 
 <section class="section">
   <div class="container">
-    <figure class="photo-frame wide">
-      <img src="{{ url_for('static', filename='img/class-group.jpg') }}" alt="Students working together at a table during class">
-    </figure>
-
-    <div class="schedule">
-      {% for level, icon, note, slots in schedule %}
-        <div class="schedule-row">
-          <div class="schedule-level">
-            <span class="round-icon"><i data-lucide="{{ icon }}"></i></span>
-            <strong>{{ level }}</strong>
-            {% if note %}<em class="accent">{{ note }}</em>{% endif %}
-          </div>
-          <div class="schedule-slots">
-            {% for day, time in slots %}
-              <div class="slot"><i data-lucide="calendar"></i><span>{{ day }}</span><time>{{ time }}</time></div>
-            {% endfor %}
-          </div>
-        </div>
+    <nav class="year-tabs" role="tablist" aria-label="Choose a year">
+      {% for y in schedules %}
+        <a href="#year-{{ y.year }}" id="tab-{{ y.year }}" role="tab" aria-controls="year-{{ y.year }}"
+           aria-selected="{{ 'true' if loop.first else 'false' }}">
+          {{ y.year }}{% if y.badge %} <span class="tab-badge">{{ y.badge }}</span>{% endif %}
+        </a>
       {% endfor %}
-    </div>
+    </nav>
+
+    {% for y in schedules %}
+      <section class="year-panel" id="year-{{ y.year }}" role="tabpanel" aria-labelledby="tab-{{ y.year }}">
+        <div class="section-head">
+          <h2>{{ y.year }} Class Schedule</h2>
+          {% if y.intro %}<p>{{ y.intro }}</p>{% endif %}
+        </div>
+
+        <div class="schedule">
+          {% for level, icon, note, slots in y.rows %}
+            <div class="schedule-row">
+              <div class="schedule-level">
+                <span class="round-icon"><i data-lucide="{{ icon }}"></i></span>
+                <strong>{{ level }}</strong>
+                {% if note %}<em class="accent">{{ note }}</em>{% endif %}
+              </div>
+              <div class="schedule-slots">
+                {% for day, time in slots %}
+                  <div class="slot"><i data-lucide="calendar"></i><span>{{ day }}</span><time>{{ time }}</time></div>
+                {% endfor %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+        {% if y.terms %}
+          <h3 class="term-heading">{{ y.year }} Term Structure</h3>
+          <div class="card term-table-wrap">
+            <table class="term-table">
+              <thead>
+                <tr><th scope="col">Term</th><th scope="col">Teaching period</th><th scope="col">Payment due</th></tr>
+              </thead>
+              <tbody>
+                {% for term, period, due in y.terms %}
+                  <tr>
+                    <th scope="row">{{ term }}</th>
+                    <td data-label="Teaching period">{{ period }}</td>
+                    <td data-label="Payment due">{{ due }}</td>
+                  </tr>
+                {% endfor %}
+                <tr class="term-break">
+                  <th scope="row">December</th>
+                  <td colspan="2">Scheduled break (no lessons)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        {% endif %}
+
+        <div class="btn-row btn-row-center year-actions">
+          <a class="btn btn-primary" href="{{ url_for('enquire') }}#contact-form">Check {{ y.year }} slot availability</a>
+          {% if y.poster %}
+            <a class="btn btn-ghost" href="{{ url_for('static', filename=y.poster) }}" download><i data-lucide="download"></i> Download {{ y.year }} poster</a>
+          {% endif %}
+        </div>
+      </section>
+    {% endfor %}
 
     <div class="two-col">
       <article class="card info-card">
@@ -41,7 +86,10 @@
         <p>Each class is capped at 10 students for personalised attention and meaningful learning.</p>
       </article>
     </div>
-    <p class="center"><a class="btn btn-primary" href="{{ url_for('enquire') }}#contact-form">Check slot availability</a></p>
+    <figure class="photo-frame centered">
+      <img src="{{ url_for('static', filename='img/class-group.jpg') }}" alt="Students working together at a table during class" loading="lazy">
+      <figcaption>A small-group class in session</figcaption>
+    </figure>
   </div>
 </section>
 {% endblock %}
