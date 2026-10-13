@@ -206,7 +206,7 @@ main:focus { outline: none; }
 .term-table thead th { background: var(--navy); color: #fff; font-size: .85rem; text-transform: uppercase; letter-spacing: .06em; }
 .term-table tbody th { font-family: var(--serif); font-size: 1.2rem; color: var(--navy); }
 .term-table tbody tr + tr { border-top: 1px solid var(--line); }
-.term-table td:last-child { font-weight: 600; color: var(--navy); }
+.term-table td { font-weight: 600; color: var(--navy); }
 .term-table .term-break { background: var(--gold-soft); }
 .term-table .term-break td { font-weight: 400; font-style: italic; color: var(--ink); }
 

@@ -48,19 +48,18 @@
           <div class="card term-table-wrap">
             <table class="term-table">
               <thead>
-                <tr><th scope="col">Term</th><th scope="col">Teaching period</th><th scope="col">Payment due</th></tr>
+                <tr><th scope="col">Term</th><th scope="col">Teaching period</th></tr>
               </thead>
               <tbody>
-                {% for term, period, due in y.terms %}
+                {% for term, period in y.terms %}
                   <tr>
                     <th scope="row">{{ term }}</th>
                     <td data-label="Teaching period">{{ period }}</td>
-                    <td data-label="Payment due">{{ due }}</td>
                   </tr>
                 {% endfor %}
                 <tr class="term-break">
                   <th scope="row">December</th>
-                  <td colspan="2">Scheduled break (no lessons)</td>
+                  <td>Scheduled break (no lessons)</td>
                 </tr>
               </tbody>
             </table>
@@ -69,9 +68,6 @@
 
         <div class="btn-row btn-row-center year-actions">
           <a class="btn btn-primary" href="{{ url_for('enquire') }}#contact-form">Check {{ y.year }} slot availability</a>
-          {% if y.poster %}
-            <a class="btn btn-ghost" href="{{ url_for('static', filename=y.poster) }}" download><i data-lucide="download"></i> Download {{ y.year }} poster</a>
-          {% endif %}
         </div>
       </section>
     {% endfor %}

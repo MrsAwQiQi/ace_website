@@ -28,9 +28,9 @@ BUSINESS = {
     "instagram": "Mrsawqiqi",
     "whatsapp": "9222 1021",
     "whatsapp_link": "https://wa.me/6592221021",
-    # Opens the Google reviews panel for the business listing.
-    "reviews_link": "https://www.google.com/search?q=Achieving+Excellence+in+English+with+Mrs+Aw"
-                    "#lrd=0x31da3d6e0dd2a9e5:0xa906496bca5f04d7,1,,,,",
+    # Google Maps page for the business listing, which shows its reviews. The number is the
+    # listing's CID (the second hex value in Google's "#lrd=" link, converted to decimal).
+    "reviews_link": "https://www.google.com/maps?cid=12179502969575638231",
 }
 
 NAV = [
@@ -116,10 +116,10 @@ SCHEDULE_2027 = [
 ]
 
 TERMS_2027 = [
-    ("Term 1", "4 January – 13 March", "25 November 2026"),
-    ("Term 2", "22 March – 29 May", "End February"),
-    ("Term 3", "28 June – 12 September", "End May"),
-    ("Term 4", "20 September – 30 November", "End August"),
+    ("Term 1", "4 January – 13 March"),
+    ("Term 2", "22 March – 29 May"),
+    ("Term 3", "28 June – 12 September"),
+    ("Term 4", "20 September – 30 November"),
 ]
 
 SCHEDULE_2026 = [
@@ -136,9 +136,9 @@ SCHEDULE_2026 = [
 # Year tabs on the schedule page, newest first (the first one opens by default).
 SCHEDULES = [
     {"year": "2027", "badge": "New", "intro": "The new academic year starts this November.",
-     "rows": SCHEDULE_2027, "terms": TERMS_2027, "poster": "img/2027-class-schedule.jpeg"},
+     "rows": SCHEDULE_2027, "terms": TERMS_2027},
     {"year": "2026", "badge": None, "intro": None,
-     "rows": SCHEDULE_2026, "terms": None, "poster": None},
+     "rows": SCHEDULE_2026, "terms": None},
 ]
 
 # The year parents are enrolling for: the newest year on the schedule page.
