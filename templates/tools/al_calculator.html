@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}AL Grade Calculator · {{ biz.brand }}{% endblock %}
+{% block content %}
+<section class="page-hero tool-hero">
+  <div class="container">
+    <p class="eyebrow">Student tool</p>
+    <h1>AL Grade Calculator</h1>
+    <p>Key in your child’s marks for each component and get a personalised breakdown of where to focus next.</p>
+  </div>
+</section>
+
+<section class="section tool-page" id="al-calc">
+  <div class="container">
+    <a class="back-link" href="{{ url_for('tools') }}"><i data-lucide="arrow-left"></i> All student tools</a>
+
+    <div class="calc-grid">
+      <div class="card tool-panel">
+        <div class="panel-head">
+          <h2>Your marks</h2>
+          <button class="btn btn-ghost btn-small" type="button" id="al-reset"><i data-lucide="rotate-ccw"></i> Reset</button>
+        </div>
+        <div id="al-components" class="mark-list"></div>
+      </div>
+
+      <aside class="card tool-panel result-panel" aria-live="polite">
+        <p class="eyebrow">Your result</p>
+        <div class="al-badge" id="al-grade">AL8</div>
+        <div class="al-stats">
+          <div><strong id="al-total">0</strong><span>out of 200</span></div>
+          <div><strong id="al-score">0</strong><span>score out of 100</span></div>
+        </div>
+        <ol class="al-ladder" id="al-ladder" aria-label="AL levels, AL1 is the best"></ol>
+        <p class="al-next" id="al-next"></p>
+      </aside>
+    </div>
+
+    <div class="calc-grid lower">
+      <div class="card tool-panel">
+        <h2><i data-lucide="target"></i> Where to focus</h2>
+        <p class="small muted">Ranked by how many marks you could still gain.</p>
+        <ol class="focus-list" id="al-focus"></ol>
+      </div>
+      <div class="card tool-panel tips-panel">
+        <h2><i data-lucide="sparkles"></i> Mrs Aw’s tip</h2>
+        <p id="al-tip"></p>
+      </div>
+    </div>
+
+    <div class="card tool-panel al-ref">
+      <h2>AL boundaries reference (English)</h2>
+      <table class="al-ref-table">
+        <thead><tr><th scope="col">AL</th><th scope="col">Score (out of 100)</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">AL1</th><td>≥ 90</td></tr>
+          <tr><th scope="row">AL2</th><td>85 – 89</td></tr>
+          <tr><th scope="row">AL3</th><td>80 – 84</td></tr>
+          <tr><th scope="row">AL4</th><td>75 – 79</td></tr>
+          <tr><th scope="row">AL5</th><td>65 – 74</td></tr>
+          <tr><th scope="row">AL6</th><td>45 – 64</td></tr>
+          <tr><th scope="row">AL7</th><td>20 – 44</td></tr>
+          <tr><th scope="row">AL8</th><td>&lt; 20</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div class="result-dock" id="al-dock" aria-hidden="true">
+  <span class="dock-al" id="dock-al">AL8</span>
+  <span><strong id="dock-total">0</strong> / 200</span>
+  <span class="dock-next" id="dock-next"></span>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/confetti.js') }}"></script>
+<script src="{{ url_for('static', filename='js/al_calculator.js') }}"></script>
+{% endblock %}

@@ -67,7 +67,7 @@
     <div class="container footer-bottom small">© {{ year }} {{ biz.registered_name }}. All rights reserved.</div>
   </footer>
 
-  {% if page != 'enquire' %}
+  {% if page not in ('enquire', 'tools') %}
     <a class="wa-float" href="{{ biz.whatsapp_link }}" target="_blank" rel="noopener" aria-label="WhatsApp Mrs Aw at {{ biz.whatsapp }}">
       <i data-lucide="message-circle"></i><span>WhatsApp</span>
     </a>
@@ -75,5 +75,6 @@
 
   <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
   <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  {% block scripts %}{% endblock %}
 </body>
 </html>

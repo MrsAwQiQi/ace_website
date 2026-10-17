@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% block title %}Spelling Practice · {{ biz.brand }}{% endblock %}
+{% block content %}
+<section class="page-hero tool-hero">
+  <div class="container">
+    <p class="eyebrow">Student tool</p>
+    <h1>Spelling Practice</h1>
+    <p>Type in your spelling list, learn the words with flashcards, then test yourself by listening.</p>
+  </div>
+</section>
+
+<section class="section tool-page" id="spelling">
+  <div class="container narrow">
+    <a class="back-link" href="{{ url_for('tools') }}"><i data-lucide="arrow-left"></i> All student tools</a>
+
+    <ol class="steps" id="sp-steps" aria-label="Progress">
+      <li><button type="button" data-step="setup"><span>1</span> Words</button></li>
+      <li><button type="button" data-step="mode"><span>2</span> Choose</button></li>
+      <li><button type="button" data-step="practise" disabled><span>3</span> Practise</button></li>
+      <li><button type="button" data-step="results" disabled><span>4</span> Results</button></li>
+    </ol>
+
+    <p class="sp-notice" id="sp-no-speech" hidden><i data-lucide="volume-x"></i> This browser can’t read words aloud. Try Chrome or Safari, or ask someone to read the words to you.</p>
+
+    <!-- 1. Word list -->
+    <div class="card tool-panel sp-view" id="sp-setup">
+      <label class="panel-label" for="sp-words">Your spelling words</label>
+      <textarea id="sp-words" rows="8" placeholder="One word per line, for example:
+persuade
+consequence, a result of an action
+nominalisation"></textarea>
+      <div class="sp-meta">
+        <span id="sp-count" class="sp-count">0 words</span>
+        <button class="link-btn" type="button" id="sp-sample">Try a sample list</button>
+      </div>
+      <p class="small muted">Tip: add a comma and a meaning after a word to see it on the flashcard.</p>
+      <p class="sp-message" id="sp-message" role="status"></p>
+
+      <div class="btn-row">
+        <button class="btn btn-primary btn-big" type="button" id="sp-start">Start practising <i data-lucide="arrow-right"></i></button>
+        <button class="btn btn-ghost" type="button" id="sp-save-open"><i data-lucide="bookmark"></i> Save this list</button>
+      </div>
+
+      <form class="sp-save-form" id="sp-save-form" hidden>
+        <label for="sp-save-name">Name this list</label>
+        <div class="sp-save-row">
+          <input id="sp-save-name" maxlength="40" placeholder="e.g. P5 Week 3 words" autocomplete="off">
+          <button class="btn btn-primary btn-small" type="submit">Save</button>
+          <button class="btn btn-ghost btn-small" type="button" id="sp-save-cancel">Cancel</button>
+        </div>
+      </form>
+
+      <div class="sp-saved" id="sp-saved" hidden>
+        <h3>Your saved lists</h3>
+        <p class="small muted">Saved on this device. Tap a list to load it.</p>
+        <div class="sp-chips" id="sp-chips"></div>
+      </div>
+    </div>
+
+    <!-- 2. Choose a mode -->
+    <div class="card tool-panel sp-view" id="sp-mode" hidden>
+      <h2 class="center" id="sp-ready">Ready to practise!</h2>
+      <div class="mode-grid">
+        <button class="mode-card" type="button" id="sp-pick-learn">
+          <span class="mode-emoji" aria-hidden="true">🗂️</span>
+          <strong>Learn</strong>
+          <span>Flip through flashcards and hear each word.</span>
+        </button>
+        <button class="mode-card" type="button" id="sp-pick-test">
+          <span class="mode-emoji" aria-hidden="true">✏️</span>
+          <strong>Spelling Test</strong>
+          <span>Listen and spell each word, with missing-letter hints if you want them.</span>
+        </button>
+      </div>
+      <button class="link-btn sp-back" type="button" data-go="setup">← Change my words</button>
+    </div>
+
+    <!-- 3a. Learn -->
+    <div class="card tool-panel sp-view" id="sp-learn" hidden>
+      <div class="sp-progress"><span id="sp-learn-count">1 / 1</span><div class="bar"><span id="sp-learn-bar"></span></div></div>
+      <button class="flashcard" type="button" id="sp-card" aria-label="Flashcard. Tap to flip.">
+        <span class="flashcard-inner">
+          <span class="flashcard-face front" id="sp-card-front"></span>
+          <span class="flashcard-face back" id="sp-card-back"></span>
+        </span>
+      </button>
+      <p class="center small muted">Tap the card to see the letters. On a keyboard, use ← → and the space bar.</p>
+      <div class="sp-controls">
+        <button class="btn btn-ghost" type="button" id="sp-prev" aria-label="Previous word"><i data-lucide="chevron-left"></i> Back</button>
+        <button class="speak-btn" type="button" id="sp-learn-speak" aria-label="Hear the word"><i data-lucide="volume-2"></i></button>
+        <button class="btn btn-primary" type="button" id="sp-next" aria-label="Next word">Next <i data-lucide="chevron-right"></i></button>
+      </div>
+      <div class="sp-learn-done" id="sp-learn-done" hidden>
+        <p><strong>You’ve seen every word!</strong> Ready to test yourself?</p>
+        <button class="btn btn-primary" type="button" id="sp-learn-to-test">Start the spelling test <i data-lucide="arrow-right"></i></button>
+      </div>
+      <button class="link-btn sp-back" type="button" data-go="mode">← Choose another mode</button>
+    </div>
+
+    <!-- 3b. Test -->
+    <div class="card tool-panel sp-view" id="sp-test" hidden>
+      <div class="sp-progress"><span id="sp-test-count">1 / 1</span><div class="bar"><span id="sp-test-bar"></span></div></div>
+      <label class="sp-switch">
+        <input type="checkbox" role="switch" id="sp-whole">
+        <span class="track" aria-hidden="true"></span>
+        <span><strong>Whole words only</strong> <small>Skip the missing-letter hints</small></span>
+      </label>
+
+      <div class="listen-box">
+        <button class="speak-btn big" type="button" id="sp-test-speak" aria-label="Hear the word again"><i data-lucide="volume-2"></i></button>
+        <p>Tap to hear the word</p>
+      </div>
+
+      <div id="sp-stage-blanks">
+        <p class="stage-label">Fill in the missing letters</p>
+        <div class="tile-row" id="sp-tiles"></div>
+        <div class="center">
+          <button class="btn btn-primary" type="button" id="sp-blanks-next" disabled>Next step <i data-lucide="arrow-right"></i></button>
+          <p><button class="link-btn" type="button" id="sp-blanks-skip">Skip to spelling the whole word</button></p>
+        </div>
+      </div>
+
+      <form id="sp-stage-type" hidden>
+        <p class="stage-label" id="sp-type-label">Now spell the whole word</p>
+        <div class="answer-row">
+          <input id="sp-answer" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Type what you hear" aria-label="Your spelling">
+          <button class="btn btn-primary" type="submit" id="sp-check">Check</button>
+        </div>
+        <p class="sp-feedback" id="sp-feedback" role="status"></p>
+        <div class="center"><button class="btn btn-primary" type="button" id="sp-test-next" hidden>Next word <i data-lucide="arrow-right"></i></button></div>
+      </form>
+      <button class="link-btn sp-back" type="button" data-go="mode">← Stop the test</button>
+    </div>
+
+    <!-- 4. Results -->
+    <div class="card tool-panel sp-view" id="sp-results" hidden>
+      <div class="score-ring" id="sp-ring"><strong id="sp-score">0/0</strong><span>correct</span></div>
+      <p class="stars" id="sp-stars" aria-hidden="true"></p>
+      <h2 class="center" id="sp-result-title"></h2>
+      <div id="sp-mistakes"></div>
+      <div class="btn-row btn-row-center">
+        <button class="btn btn-primary" type="button" id="sp-retry" hidden><i data-lucide="rotate-ccw"></i> Practise my mistakes</button>
+        <button class="btn btn-ghost" type="button" data-go="mode">Try another mode</button>
+        <button class="btn btn-ghost" type="button" data-go="setup">Change my words</button>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/confetti.js') }}"></script>
+<script src="{{ url_for('static', filename='js/spelling.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Student Tools · {{ biz.brand }}{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <h1>Student Tools</h1>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="tool-grid">
+      {% for t in tools %}
+        <a class="card tool-card" href="{{ url_for(t.endpoint) }}">
+          <span class="tool-icon"><i data-lucide="{{ t.icon }}"></i></span>
+          <h2>{{ t.title }}</h2>
+          <p>{{ t.blurb }}</p>
+          <span class="btn btn-primary">Open tool <i data-lucide="arrow-right"></i></span>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

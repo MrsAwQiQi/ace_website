@@ -40,7 +40,16 @@ NAV = [
     ("fees", "Fees"),
     ("schedule", "Class Schedule"),
     ("policies", "Policies"),
+    ("tools", "Student Tools"),
     ("enquire", "Enquire"),
+]
+
+# Free tools for students: listed on the /tools hub and the home page.
+TOOLS = [
+    {"endpoint": "spelling", "title": "Spelling Practice", "icon": "spell-check",
+     "blurb": "Type in your spelling list, learn it with flashcards, then test yourself by listening."},
+    {"endpoint": "al_calculator", "title": "AL Grade Calculator", "icon": "calculator",
+     "blurb": "Key in your child’s marks for each component and get a personalised breakdown of where to focus next."},
 ]
 
 HEART = [
@@ -203,7 +212,7 @@ def inject_globals():
 
 @app.route("/")
 def home():
-    return render_template("home.html", page="home", heart=HEART, reviews=REVIEWS)
+    return render_template("home.html", page="home", heart=HEART, reviews=REVIEWS, tools=TOOLS)
 
 
 @app.route("/about")
@@ -224,6 +233,21 @@ def fees():
 @app.route("/schedule")
 def schedule():
     return render_template("schedule.html", page="schedule", schedules=SCHEDULES)
+
+
+@app.route("/tools")
+def tools():
+    return render_template("tools.html", page="tools", tools=TOOLS)
+
+
+@app.route("/tools/al-calculator")
+def al_calculator():
+    return render_template("tools/al_calculator.html", page="tools")
+
+
+@app.route("/tools/spelling")
+def spelling():
+    return render_template("tools/spelling.html", page="tools")
 
 
 @app.route("/policies")

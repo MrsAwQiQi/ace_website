@@ -81,7 +81,25 @@
   </div>
 </section>
 
-<section class="section section-alt">
+<section class="section section-alt tools-strip">
+  <div class="container">
+    <div class="section-head">
+      <h2>Student tools</h2>
+      <p>Practise at home with Mrs Aw’s free tools.</p>
+    </div>
+    <div class="tool-grid">
+      {% for t in tools %}
+        <a class="card tool-card compact" href="{{ url_for(t.endpoint) }}">
+          <span class="tool-icon"><i data-lucide="{{ t.icon }}"></i></span>
+          <span class="tool-body"><strong>{{ t.title }}</strong><small>{{ t.blurb }}</small></span>
+          <i class="tool-arrow" data-lucide="arrow-right"></i>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section">
   <div class="container">
     <div class="section-head">
       <p class="eyebrow">What a lesson with Mrs Aw looks like</p>
@@ -96,7 +114,7 @@
   </div>
 </section>
 
-<section class="section cta-band">
+<section class="section section-alt cta-band">
   <div class="container center">
     <h2>Find the right class for your child</h2>
     <p>Classes are capped at 10 students, so some levels fill up. Ask Mrs Aw about available slots.</p>
