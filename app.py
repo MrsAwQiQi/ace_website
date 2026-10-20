@@ -158,10 +158,12 @@ ATTENDANCE = [
      "Each child's slot is reserved in advance, so missed lessons are generally not refundable."),
     ("Inform Early", "message-circle-more",
      "Please let Mrs Aw know as early as possible if your child cannot attend."),
-    ("Support Options", "monitor-play",
-     "A replacement class, recording or materials may be provided where possible."),
+    ("Make-Up Lessons", "calendar-clock",
+     "Where possible, Mrs Aw will arrange a suitable make-up lesson or a fee credit, depending on the "
+     "circumstances and lesson availability."),
     ("Teacher Cancellation", "user-check",
-     "If Mrs Aw cancels a lesson, a replacement, credit or fee adjustment will be arranged."),
+     "If Mrs Aw cancels a lesson, a replacement lesson will be arranged. If a replacement cannot be "
+     "scheduled, the lesson fee will be credited towards the following term."),
 ]
 
 SUITABLE_FOR = [
