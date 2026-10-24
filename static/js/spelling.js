@@ -217,15 +217,26 @@
     if (learnIndex === words.length - 1) seenAll = true;
     renderCard();
   };
-  card.addEventListener("click", () => card.classList.toggle("flipped"));
+  // The card, the speaker and the space bar all show the letters and say the word.
+  const reveal = () => {
+    card.classList.add("flipped");
+    speak(words[learnIndex].word);
+  };
+  card.addEventListener("click", reveal);
   $("sp-prev").addEventListener("click", () => move(-1));
   $("sp-next").addEventListener("click", () => move(1));
-  $("sp-learn-speak").addEventListener("click", () => speak(words[learnIndex].word));
+  $("sp-learn-speak").addEventListener("click", reveal);
+  // Space must not scroll the page or press whichever button has focus (some browsers do that on keyup).
+  const learning = (e) => !$("sp-learn").hidden && !e.target.closest("input, textarea");
   document.addEventListener("keydown", (e) => {
-    if ($("sp-learn").hidden || e.target.matches("input, textarea")) return;
-    if (e.key === "ArrowRight") move(1);
+    if (!learning(e)) return;
+    if (e.key === " ") {
+      e.preventDefault();
+      if (!e.repeat) reveal();
+    } else if (e.key === "ArrowRight") move(1);
     else if (e.key === "ArrowLeft") move(-1);
   });
+  document.addEventListener("keyup", (e) => { if (e.key === " " && learning(e)) e.preventDefault(); });
 
   // ---------- 3b. Test ----------
   function startTest(list) {

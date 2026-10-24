@@ -46,61 +46,39 @@
   <div class="container narrow">
     <div class="section-head">
       <h2>Send an enquiry</h2>
-      <p>Fill in your details, then press the button. WhatsApp opens with your message ready to send to Mrs Aw.</p>
+      <p>Fill in your details and WhatsApp opens with your message ready to send to Mrs Aw.</p>
     </div>
 
     {% if errors %}<div class="alert error"><i data-lucide="circle-alert"></i> Please check the highlighted fields.</div>{% endif %}
 
     <form class="card contact-form" method="post" action="{{ url_for('enquire') }}#contact-form" novalidate>
-      <p class="small muted form-note">Fields marked * are required.</p>
       <div class="form-grid">
-        <label class="{{ 'invalid' if errors.parent_name }}">Parent’s name *
+        <label class="{{ 'invalid' if errors.parent_name }}">Your name
           <input name="parent_name" {{ 'aria-invalid=true' if errors.parent_name }} value="{{ form.parent_name }}" required autocomplete="name">
           {{ field_error('parent_name') }}
         </label>
-        <label class="{{ 'invalid' if errors.phone }}">Phone / WhatsApp *
-          <input name="phone" {{ 'aria-invalid=true' if errors.phone }} type="tel" value="{{ form.phone }}" required autocomplete="tel" placeholder="e.g. 9123 4567">
-          {{ field_error('phone') }}
-        </label>
-        <label class="{{ 'invalid' if errors.email }}">Email (optional)
-          <input name="email" {{ 'aria-invalid=true' if errors.email }} type="email" value="{{ form.email }}" autocomplete="email">
-          {{ field_error('email') }}
-        </label>
-        <label class="{{ 'invalid' if errors.child_level }}">Child’s level in {{ enrol_year }} *
+        <label class="{{ 'invalid' if errors.child_level }}">Child’s level in {{ enrol_year }}
           <select name="child_level" {{ 'aria-invalid=true' if errors.child_level }} required>
             <option value="">Select a level</option>
             {% for lvl in levels %}<option {{ 'selected' if form.child_level == lvl }}>{{ lvl }}</option>{% endfor %}
           </select>
           {{ field_error('child_level') }}
         </label>
-        <label class="full {{ 'invalid' if errors.concern }}">Child’s current English concern *
-          <textarea name="concern" {{ 'aria-invalid=true' if errors.concern }} rows="3" required placeholder="e.g. Struggles to organise ideas in compositions">{{ form.concern }}</textarea>
-          {{ field_error('concern') }}
-        </label>
-        <label>Preferred class timing (optional)
-          <input name="preferred_timing" value="{{ form.preferred_timing }}" placeholder="e.g. Saturday morning">
-        </label>
-        <label>Looking for
-          <select name="lesson_type">
-            {% for opt in ['Regular weekly lessons', 'Holiday workshops', 'Both'] %}
-              <option {{ 'selected' if form.lesson_type == opt }}>{{ opt }}</option>
-            {% endfor %}
-          </select>
-        </label>
         <fieldset class="full">
-          <legend>Preferred mode</legend>
-          {% for opt in ['In-person', 'Zoom', 'Either'] %}
-            <label class="radio"><input type="radio" name="mode" value="{{ opt }}"
-              {{ 'checked' if form.mode == opt or (not form.mode and opt == 'Either') }}> {{ opt }}</label>
-          {% endfor %}
+          <legend>Lesson mode</legend>
+          <div class="mode-pills">
+            {% for opt in modes %}
+              <label><input type="radio" name="mode" value="{{ opt }}"
+                {{ 'checked' if form.mode == opt or (not form.mode and opt == 'Either') }}><span>{{ opt }}</span></label>
+            {% endfor %}
+          </div>
         </fieldset>
-        <label class="full">Anything else? (optional)
-          <textarea name="message" rows="3">{{ form.message }}</textarea>
+        <label class="full"><span>Anything Mrs Aw should know? <small>(optional)</small></span>
+          <textarea name="message" rows="3" placeholder="e.g. Needs help with composition. Prefers weekend classes.">{{ form.message }}</textarea>
         </label>
         <label class="hp" aria-hidden="true">Website <input name="website" tabindex="-1" autocomplete="off"></label>
       </div>
       <button class="btn btn-whatsapp" type="submit"><i data-lucide="send"></i> Send on WhatsApp</button>
-      <p class="small muted form-note">Your message opens in WhatsApp. Check it, then press send.</p>
     </form>
   </div>
 </section>
