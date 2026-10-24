@@ -5,9 +5,11 @@ Run locally:
     python app.py
 """
 import csv
+import hashlib
 import os
 import re
 from datetime import datetime
+from functools import lru_cache
 from pathlib import Path
 from urllib.parse import quote
 
@@ -210,6 +212,33 @@ LEVEL_OPTIONS = ["Primary 1", "Primary 2", "Primary 3", "Primary 4", "Primary 5"
 @app.context_processor
 def inject_globals():
     return {"biz": BUSINESS, "nav": NAV, "year": datetime.now().year, "enrol_year": ENROL_YEAR}
+
+
+@lru_cache(maxsize=None)
+def _static_version(filename):
+    try:
+        return hashlib.md5((Path(app.static_folder) / filename).read_bytes()).hexdigest()[:10]
+    except OSError:
+        return None
+
+
+@app.url_defaults
+def static_version(endpoint, values):
+    # Adds ?v=<content hash> to static links, so browsers can cache files for a long time
+    # yet fetch the new copy as soon as a file changes.
+    if endpoint == "static" and "filename" in values and not app.debug:
+        version = _static_version(values["filename"])
+        if version:
+            values["v"] = version
+
+
+@app.after_request
+def cache_headers(response):
+    # Let Vercel's CDN reuse pages for an hour (a new deployment clears it), so the Python
+    # function only runs when a page is not already cached. Form posts are never cached.
+    if request.method == "GET" and response.status_code == 200 and response.mimetype == "text/html":
+        response.headers["Cache-Control"] = "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400"
+    return response
 
 
 @app.route("/")
