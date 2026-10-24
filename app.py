@@ -6,7 +6,6 @@ Run locally:
 """
 import csv
 import os
-import re
 from datetime import datetime
 from pathlib import Path
 from urllib.parse import quote
@@ -17,8 +16,8 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "dev-only-change-me")
 
 ENQUIRIES_FILE = Path(__file__).parent / "data" / "enquiries.csv"
-ENQUIRY_FIELDS = ["submitted_at", "parent_name", "phone", "email", "child_level",
-                  "concern", "preferred_timing", "lesson_type", "mode", "message"]
+ENQUIRY_FIELDS = ["submitted_at", "parent_name", "child_level", "mode", "message"]
+MODE_OPTIONS = ["In-person (Tampines)", "Zoom", "Either"]
 
 BUSINESS = {
     "brand": "Achieving Excellence with Mrs Aw",
@@ -114,9 +113,9 @@ SCHEDULE_2027 = [
     ("Primary 1", "sprout", None, [("Friday", "3:00 – 4:30 pm")]),
     ("Primary 2", "book-open", None, [("Thursday", "3:00 – 4:30 pm")]),
     ("Primary 3", "pencil-ruler", None, [("Saturday", "1:00 – 3:00 pm")]),
-    ("Primary 4", "trophy", None, [("Monday", "3:00 – 5:00 pm"), ("Thursday", "5:00 – 7:00 pm")]),
-    ("Primary 5", "notebook-pen", None, [("Monday", "5:00 – 7:00 pm"), ("Tuesday", "7:00 – 9:00 pm")]),
-    ("Primary 6", "graduation-cap", None, [("Friday", "5:00 – 7:00 pm"), ("Saturday", "9:00 – 11:00 am")]),
+    ("Primary 4", "trophy", "Choose one timing", [("Monday", "3:00 – 5:00 pm"), ("Thursday", "5:00 – 7:00 pm")]),
+    ("Primary 5", "notebook-pen", "Choose one timing", [("Monday", "5:00 – 7:00 pm"), ("Tuesday", "7:00 – 9:00 pm")]),
+    ("Primary 6", "graduation-cap", "Choose one timing", [("Friday", "5:00 – 7:00 pm"), ("Saturday", "9:00 – 11:00 am")]),
     ("P6 Revision Class", "file-check", "For students in regular classes · case by case",
      [("Tuesday", "5:00 pm")]),
     ("Secondary 1", "star", None, [("Thursday", "7:00 – 9:00 pm")]),
@@ -131,23 +130,9 @@ TERMS_2027 = [
     ("Term 4", "20 September – 30 November"),
 ]
 
-SCHEDULE_2026 = [
-    ("Primary 1", "sprout", "Starting 18 Sept", [("Friday", "3:00 – 4:30 pm")]),
-    ("Primary 2", "book-open", None, [("Saturday", "1:00 – 2:30 pm")]),
-    ("Primary 3", "pencil-ruler", None, [("Monday", "3:00 – 5:00 pm"), ("Thursday", "5:00 – 7:00 pm")]),
-    ("Primary 4", "trophy", None, [("Monday", "5:00 – 7:00 pm"), ("Tuesday", "7:00 – 9:00 pm")]),
-    ("Primary 5", "notebook-pen", None, [("Friday", "5:00 – 7:00 pm"), ("Saturday", "9:00 – 11:00 am")]),
-    ("Primary 6", "graduation-cap", None, [("Tuesday", "5:00 – 7:00 pm"), ("Thursday", "7:00 – 9:00 pm")]),
-    ("Secondary 1", "star", None, [("Saturday", "11:00 am – 1:00 pm")]),
-    ("Secondary 2", "lightbulb", None, [("Monday", "7:30 – 9:30 pm")]),
-]
-
 # Year tabs on the schedule page, newest first (the first one opens by default).
 SCHEDULES = [
-    {"year": "2027", "badge": "New", "intro": "The new academic year starts this November.",
-     "rows": SCHEDULE_2027, "terms": TERMS_2027},
-    {"year": "2026", "badge": None, "intro": None,
-     "rows": SCHEDULE_2026, "terms": None},
+    {"year": "2027", "badge": "New", "intro": None, "rows": SCHEDULE_2027, "terms": TERMS_2027},
 ]
 
 # The year parents are enrolling for: the newest year on the schedule page.
@@ -261,31 +246,21 @@ def policies():
 def _validate(form):
     data = {k: (form.get(k) or "").strip() for k in ENQUIRY_FIELDS[1:]}
     errors = {}
+    if data["mode"] not in MODE_OPTIONS:
+        data["mode"] = "Either"
     if not data["parent_name"]:
         errors["parent_name"] = "Please tell us your name."
-    if not re.fullmatch(r"\+?[\d\s-]{8,15}", data["phone"]):
-        errors["phone"] = "Please enter a valid phone / WhatsApp number."
-    if data["email"] and not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", data["email"]):
-        errors["email"] = "Please enter a valid email address."
     if data["child_level"] not in LEVEL_OPTIONS:
         errors["child_level"] = f"Please choose your child's level in {ENROL_YEAR}."
-    if not data["concern"]:
-        errors["concern"] = "Please share your child's current English concern."
     return data, errors
 
 
 def _whatsapp_text(d):
     lines = [f"Hi Mrs Aw, I'm {d['parent_name']}. I'd like to enquire about English classes.",
              f"Child's level in {ENROL_YEAR}: {d['child_level']}",
-             f"Current English concern: {d['concern']}"]
-    if d["preferred_timing"]:
-        lines.append(f"Preferred class timing: {d['preferred_timing']}")
-    if d["lesson_type"]:
-        lines.append(f"Looking for: {d['lesson_type']}")
-    if d["mode"]:
-        lines.append(f"Preferred mode: {d['mode']}")
+             f"Lesson mode: {d['mode']}"]
     if d["message"]:
-        lines.append(f"Message: {d['message']}")
+        lines.append(d["message"])
     return quote("\n".join(lines))
 
 
@@ -308,7 +283,7 @@ def enquire():
             except OSError:  # read-only hosts like Vercel: skip saving, the WhatsApp hand-off still works
                 app.logger.warning("Could not save enquiry to %s", ENQUIRIES_FILE)
             return redirect(f"{BUSINESS['whatsapp_link']}?text={_whatsapp_text(data)}")
-    return render_template("enquire.html", page="enquire", levels=LEVEL_OPTIONS,
+    return render_template("enquire.html", page="enquire", levels=LEVEL_OPTIONS, modes=MODE_OPTIONS,
                            form=data, errors=errors)
 
 

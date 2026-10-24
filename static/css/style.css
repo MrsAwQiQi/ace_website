@@ -84,6 +84,11 @@ main:focus { outline: none; }
 .lead { font-size: 1.12rem; color: var(--muted); max-width: 52ch; }
 .hero-meta { display: flex; gap: 20px; flex-wrap: wrap; font-weight: 600; }
 .hero-meta a { text-decoration: none; color: var(--red); }
+/* Centred under the Instagram / WhatsApp row, without making that row wider. */
+.hero-contact { display: grid; width: fit-content; max-width: 100%; }
+.verse-inline { width: 0; min-width: 100%; margin: 8px 0 0; text-align: center; color: var(--ink); }
+.verse-inline p { margin: 0; font-size: .95rem; }
+.verse-inline cite { font-style: normal; font-size: .85rem; font-weight: 700; color: var(--gold-text); }
 .photo-frame { margin: 0; padding: 10px; background: var(--paper); border: 1px solid var(--line); border-radius: 22px; box-shadow: var(--shadow); }
 .photo-frame img { border-radius: 14px; width: 100%; }
 .photo-frame figcaption { text-align: center; font-family: var(--serif); font-style: italic; color: var(--navy); padding: 10px 6px 2px; }
@@ -129,6 +134,9 @@ main:focus { outline: none; }
 /* About */
 .about-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 48px; align-items: start; }
 .prose p { font-size: 1.08rem; }
+.verse { margin: 28px 0 0; padding: 22px 26px; text-align: center; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+.verse p { margin: 0 0 6px; font-family: var(--serif); font-size: 1.6rem; font-weight: 600; line-height: 1.25; color: var(--navy); }
+.verse cite { font-style: normal; font-size: .95rem; color: var(--muted); }
 .pull { font-family: var(--serif); font-size: 1.45rem !important; color: var(--navy); border-left: 4px solid var(--gold); padding-left: 18px; }
 .heart-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
 .heart-card { padding: 26px 18px; text-align: center; display: flex; flex-direction: column; align-items: center; }
@@ -247,12 +255,15 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 18px 0; }
 .contact-form input:focus, .contact-form select:focus, .contact-form textarea:focus { outline: none; border-color: var(--navy-2); box-shadow: 0 0 0 3px rgba(29, 50, 112, .15); background: #fff; }
 .contact-form fieldset { border: 0; padding: 0; margin: 0; display: flex; gap: 22px; flex-wrap: wrap; }
 .contact-form legend { font-weight: 600; color: var(--navy); font-size: .95rem; margin-bottom: 6px; width: 100%; }
-.contact-form label.radio { flex-direction: row; align-items: center; font-weight: 400; color: var(--ink); }
+.contact-form label small { font-weight: 400; color: var(--muted); }
+.mode-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.mode-pills input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.mode-pills span { display: inline-block; padding: 9px 16px; border: 1.5px solid var(--line); border-radius: 999px; background: var(--cream); color: var(--ink); font-weight: 600; cursor: pointer; }
+.mode-pills input:checked + span { background: var(--navy); border-color: var(--navy); color: #fff; }
+.mode-pills input:focus-visible + span { outline: 3px solid var(--navy-2); outline-offset: 2px; }
 .contact-form .invalid input, .contact-form .invalid select, .contact-form .invalid textarea { border-color: var(--red); }
 .field-error { color: var(--red); font-weight: 400; font-size: .85rem; }
 .hp { position: absolute !important; left: -9999px; }
-.form-note { margin: 0 0 16px; }
-.contact-form button + .form-note { margin: 12px 0 0; }
 .alert { display: flex; gap: 12px; align-items: flex-start; padding: 18px 20px; border-radius: 14px; margin-bottom: 20px; }
 .alert p { margin: 4px 0 0; }
 .alert.success { background: #e8f6ee; border: 1px solid #a6dcbb; color: #17462c; }
