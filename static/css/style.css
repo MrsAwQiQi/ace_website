@@ -84,8 +84,9 @@ main:focus { outline: none; }
 .lead { font-size: 1.12rem; color: var(--muted); max-width: 52ch; }
 .hero-meta { display: flex; gap: 20px; flex-wrap: wrap; font-weight: 600; }
 .hero-meta a { text-decoration: none; color: var(--red); }
-/* Centred under the Instagram / WhatsApp row, without making that row wider. */
-.hero-contact { display: grid; width: fit-content; max-width: 100%; }
+/* Buttons set the width; the contact line and verse are centred under them without widening it. */
+.hero-actions { display: grid; justify-items: center; width: fit-content; max-width: 100%; }
+.hero-actions .btn-row { justify-content: center; margin-bottom: 16px; }
 .verse-inline { width: 0; min-width: 100%; margin: 8px 0 0; text-align: center; color: var(--ink); }
 .verse-inline p { margin: 0; font-size: .95rem; }
 .verse-inline cite { font-style: normal; font-size: .85rem; font-weight: 700; color: var(--gold-text); }

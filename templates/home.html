@@ -8,11 +8,11 @@
       <p class="hero-tagline">{{ biz.tagline }}</p>
       <p class="lead">Helping Primary and Secondary students make sense of English through clear frameworks,
         guided thinking routines, and firm but kind feedback.</p>
-      <div class="btn-row">
-        <a class="btn btn-primary" href="{{ url_for('enquire') }}#contact-form">Enquire about a class</a>
-        <a class="btn btn-ghost" href="{{ url_for('schedule') }}">See class schedule</a>
-      </div>
-      <div class="hero-contact">
+      <div class="hero-actions">
+        <div class="btn-row">
+          <a class="btn btn-primary" href="{{ url_for('enquire') }}#contact-form">Enquire about a class</a>
+          <a class="btn btn-ghost" href="{{ url_for('schedule') }}">See class schedule</a>
+        </div>
         <p class="hero-meta">
           <a href="https://instagram.com/{{ biz.instagram }}" target="_blank" rel="noopener"><i data-lucide="instagram"></i> @{{ biz.instagram }}</a>
           <a href="{{ biz.whatsapp_link }}" target="_blank" rel="noopener"><i data-lucide="phone"></i> WhatsApp {{ biz.whatsapp }}</a>
