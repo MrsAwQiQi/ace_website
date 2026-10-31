@@ -45,6 +45,17 @@ NAV = [
     ("enquire", "Enquire"),
 ]
 
+# Home page hero slideshow, in order. Remove an entry to take that slide down.
+HERO_SLIDES = [
+    {"image": "img/p6-2027-announcement.jpeg",
+     "alt": "New P6 class opening: 2027 PSLE preparation, every Tuesday 3–5 pm in Tampines and on Zoom. Waitlist now open.",
+     "caption": "New P6 class for 2027",
+     "whatsapp_text": "Hi Mrs Aw, I'm interested in the new P6 class (Tuesday 3–5 pm). Please add me to the waitlist."},
+    {"image": "img/hero-p2-boys.jpg",
+     "alt": "Two Primary 2 boys writing at their desks",
+     "caption": "Primary 2 boys working hard on a Vocabulary Cloze"},
+]
+
 # Free tools for students: listed on the /tools hub and the home page.
 TOOLS = [
     {"endpoint": "spelling", "title": "Spelling Practice", "icon": "spell-check",
@@ -228,7 +239,8 @@ def cache_headers(response):
 
 @app.route("/")
 def home():
-    return render_template("home.html", page="home", heart=HEART, reviews=REVIEWS, tools=TOOLS)
+    return render_template("home.html", page="home", heart=HEART, reviews=REVIEWS, tools=TOOLS,
+                           slides=HERO_SLIDES)
 
 
 @app.route("/about")

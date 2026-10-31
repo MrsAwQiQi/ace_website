@@ -23,10 +23,28 @@
         </blockquote>
       </div>
     </div>
-    <figure class="photo-frame">
-      <img src="{{ url_for('static', filename='img/hero-p2-boys.jpg') }}" alt="Two Primary 2 boys writing at their desks">
-      <figcaption>Primary 2 boys working hard on a Vocabulary Cloze</figcaption>
-    </figure>
+    <div class="photo-frame slideshow" role="region" aria-roledescription="carousel" aria-label="Highlights">
+      <div class="slide-track">
+        {% for s in slides %}
+          <figure class="slide" aria-roledescription="slide" aria-label="{{ loop.index }} of {{ loop.length }}">
+            {% set src = url_for('static', filename=s.image) %}
+            {% if s.whatsapp_text %}
+              <a class="slide-img" href="{{ biz.whatsapp_link }}?text={{ s.whatsapp_text|urlencode }}" target="_blank" rel="noopener">
+                <img src="{{ src }}" alt="{{ s.alt }}">
+              </a>
+            {% else %}
+              <div class="slide-img fit" style="--bg: url('{{ src }}')"><img src="{{ src }}" alt="{{ s.alt }}"></div>
+            {% endif %}
+            <figcaption>{{ s.caption }}</figcaption>
+          </figure>
+        {% endfor %}
+      </div>
+      {% if slides|length > 1 %}
+        <div class="slide-dots">
+          {% for s in slides %}<button type="button" aria-label="Show slide {{ loop.index }}"></button>{% endfor %}
+        </div>
+      {% endif %}
+    </div>
   </div>
 </section>
 
